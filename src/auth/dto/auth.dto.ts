@@ -1,7 +1,13 @@
-import {  } from "class-validator";
-export interface AuthDto {
-    @IsEmail()
-    email: string
+import { ApiProperty } from '@nestjs/swagger';
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
-    password: string
-} 
+export class AuthDto {
+  @ApiProperty()
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  password: string;
+}

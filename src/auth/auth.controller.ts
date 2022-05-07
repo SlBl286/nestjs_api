@@ -1,33 +1,29 @@
-import { Body, Controller, Get, Post } from "@nestjs/common";
-import { Request } from "express";
-import { AuthService } from "./auth.service";
-import { AuthDto } from "./dto";
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+} from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import { Request } from 'express';
+import { STATUS_CODES } from 'http';
+import { AuthService } from './auth.service';
+import { AuthDto } from './dto';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
+  constructor(private authService: AuthService) {}
 
-    constructor(private authService: AuthService) { }
-
-
-    @Post('signup')
-    signup(@Body() dto: AuthDto){
-        console.log({
-            dto,
-        });
-        if (dto.email) {
-            
-        }
-        return this.authService.sigup();
-
-    }
-
-    @Post('signin')
-    signin(){
-        return this.authService.login();
-    }
-
-    @Get('signup')
-    signup_get(){
-        return {"msg": "singup page"}
-    }
+  @Post('signup')
+  signup(@Body() dto: AuthDto) {
+    return this.authService.sigup(dto);
+  }
+  @HttpCode(HttpStatus.OK)
+  @Post('signin')
+  signin(@Body() dto: AuthDto) {
+    return this.authService.login(dto);
+  }
 }
