@@ -15,6 +15,7 @@ export class UserService {
       data: {
         fisrtName: userDto.firstName,
         lastName: userDto.lastName,
+        avatar: userDto.avatar,
       },
     });
   }

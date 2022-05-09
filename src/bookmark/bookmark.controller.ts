@@ -10,7 +10,15 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiOperation,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Bookmark, User } from '@prisma/client';
 import { GetUser } from 'src/auth/decorator';
 import { JwtGuard } from 'src/auth/guard';
@@ -48,10 +56,12 @@ export class BookmarkController {
     return await this.bookmarkService.deleteBookmark(id);
   }
 
-  @ApiBody({
+  @ApiResponse({
+    status: 200,
+    description: 'Success',
     type: [BookmarkDto],
-    description: 'list bookmark of current user',
   })
+  @ApiOperation({ description: 'List bookmarks of current user' })
   @UseGuards(JwtGuard)
   @Get('list')
   async listByUser(@GetUser() user: User): Promise<Bookmark[]> {

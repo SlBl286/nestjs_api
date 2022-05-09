@@ -6,8 +6,12 @@ import {
   DocumentBuilder,
   SwaggerDocumentOptions,
 } from '@nestjs/swagger';
+import { PrismaService } from './prisma/prisma.service';
 
 async function bootstrap() {
+
+
+
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(
     new ValidationPipe({
@@ -16,9 +20,9 @@ async function bootstrap() {
   );
 
   const config = new DocumentBuilder()
-    .setTitle('Nestjs Api')
-    .setDescription('The nestjs api description')
-    .setVersion('1.0')
+    .setTitle('Api List')
+    .setDescription('The api description')
+    .setVersion('0.1')
     .addBearerAuth()
     .build();
   const options: SwaggerDocumentOptions = {
@@ -26,7 +30,9 @@ async function bootstrap() {
   };
   const document = SwaggerModule.createDocument(app, config, options);
 
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('swagger', app, document);
+  
   await app.listen(2202);
+
 }
 bootstrap();
