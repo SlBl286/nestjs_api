@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Put, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 import { GetUser } from '../auth/decorator';
@@ -23,7 +23,15 @@ export class UserController {
   async updateMe(@Body() userDto: UserDto, @GetUser() user: User) {
     var updatedUser = await this.userService.updateUser(userDto, user);
     delete updatedUser.id;
+
     delete updatedUser.hash;
     return updatedUser;
+  }
+
+  @UseGuards(JwtGuard)
+  @Delete('me')
+  async deleteMe(@GetUser() user: User) {
+    await this.userService.deleteUser(user.id);
+    return {};
   }
 }

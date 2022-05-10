@@ -6,7 +6,7 @@ export class BookmarkDto {
   @IsString()
   @IsNotEmpty()
   title: string;
-  @ApiProperty()
+  @ApiProperty({ required: false, nullable: true })
   @IsString()
   description: string;
   @ApiProperty()
