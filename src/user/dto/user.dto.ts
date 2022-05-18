@@ -6,11 +6,18 @@ export class UserDto {
     type: String,
   })
   @IsString()
-  firstName: string;
+  name: string;
   @ApiProperty()
   @IsString()
-  lastName: string;
+  nickName: string;
   @ApiProperty()
   @IsString()
   avatar: string;
+  @ApiProperty()  
+  @IsString()
+  bio: string;
+  @ApiProperty()
+  @IsString()
+  website: string;
+
 }

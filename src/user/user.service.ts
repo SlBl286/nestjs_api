@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { User } from '@prisma/client';
+import { User,UserInfo } from '@prisma/client';
+import { userInfo } from 'os';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UserDto } from './dto';
 
@@ -13,9 +14,16 @@ export class UserService {
         id: user.id,
       },
       data: {
-        fisrtName: userDto.firstName,
-        lastName: userDto.lastName,
-        avatar: userDto.avatar,
+        info :{
+          update: {
+            name: userDto.name,
+            nickname: userDto.nickName,
+            avatar: userDto.avatar,
+            bio: userDto.bio,
+            website: userDto.website
+
+          }
+        },
       },
     });
   }

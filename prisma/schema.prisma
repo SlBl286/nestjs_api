@@ -18,24 +18,88 @@ model User {
     email       String      @unique
     hash        String
 
-    fisrtName   String?
-    lastName    String?
+    info        UserInfo?    
+}
+model UserInfo {
+    id          Int         @id @default(autoincrement())
+    name        String?
+    nickname    String
+    bio         String?
     avatar      String?
+    website     String?
 
-    bookmarks   Bookmark[]
-    @@map("users")
+    comments    Comment[]
+    posts       Post[]
+
+    userId      Int
+    user        User        @relation(fields: [userId], references: [id])
+
 }
 
 
-model Bookmark {
+model Category {
     id          Int         @id @default(autoincrement())
     createdAt   DateTime    @default(now())
     updatedAt   DateTime    @updatedAt
-    title       String
-    description String?
-    link        String
-    userId      Int
-    user         User        @relation(fields: [userId], references: [id])
+    name        String      @unique
 
-    @@map("bookmark")
+
+    posts       CategoriesOnPosts[]
 }
+
+model Comment {
+    id          Int         @id @default(autoincrement())
+    createdAt   DateTime    @default(now())
+    updatedAt   DateTime    @updatedAt
+    content     String
+    likeCount   Int
+    
+    userId      Int
+    user        UserInfo    @relation(fields: [userId],references: [id])
+    postId      Int
+    post        Post        @relation(fields: [postId],references: [id])
+
+}
+
+model Post {
+    id          Int         @id @default(autoincrement())
+    createdAt   DateTime    @default(now())
+    updatedAt   DateTime    @updatedAt
+    content     String      
+    mediaList   Media[]
+    likeCount   Int
+
+    comments    Comment[]
+    categories  CategoriesOnPosts[]
+
+    userId      Int
+    user        UserInfo    @relation(fields: [userId],references: [id])
+    
+}
+
+model Media {
+    id          Int         @id @default(autoincrement())
+    createdAt   DateTime    @default(now())
+    updatedAt   DateTime    @updatedAt
+    order       Int
+    content     String
+    type        String
+    
+
+    postId      Int
+    post        Post        @relation(fields: [postId],references: [id])
+
+}
+
+model CategoriesOnPosts {
+    post        Post        @relation(fields: [postId], references: [id])
+    postId      Int
+    Category    Category    @relation(fields: [categoryId],references: [id])
+    categoryId  Int
+    createdAt   DateTime    @default(now())
+    updatedAt   DateTime    @updatedAt
+    
+
+    @@id([postId,categoryId])
+}
+
