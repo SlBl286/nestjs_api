@@ -1,14 +1,11 @@
 import {
   Body,
   Controller,
-  Get,
   HttpCode,
   HttpStatus,
   Post,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { Request } from 'express';
-import { STATUS_CODES } from 'http';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto';
 

@@ -3,7 +3,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 import { GetUser } from '../auth/decorator';
 import { JwtGuard } from '../auth/guard';
-import { UserDto } from './dto';
+import { UserInfoUpdateDto } from './dto';
 import { UserService } from './user.service';
 
 @ApiBearerAuth()
@@ -14,13 +14,15 @@ export class UserController {
 
   @UseGuards(JwtGuard)
   @Get('me')
-  getMe(@GetUser() user: User) {
-    delete user.id;
-    return user;
+  async getMe(@GetUser() user: User) {
+
+    var a = await this.userService.getUserInfo(user.id);
+        console.log(a);
+        return a;
   }
   @UseGuards(JwtGuard)
   @Put('me')
-  async updateMe(@Body() userDto: UserDto, @GetUser() user: User) {
+  async updateMe(@Body() userDto: UserInfoUpdateDto, @GetUser() user: User) {
     var updatedUser = await this.userService.updateUser(userDto, user);
     delete updatedUser.id;
 

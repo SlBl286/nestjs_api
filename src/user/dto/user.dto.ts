@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { IsEmail, IsString } from 'class-validator';
 
-export class UserDto {
+export class UserInfoUpdateDto {
   @ApiProperty({
     type: String,
   })
@@ -21,3 +21,19 @@ export class UserDto {
   website: string;
 
 }
+
+export class UserInfoDto{
+    @IsEmail()
+    email: string;
+    @IsString()
+    name: string;
+    @IsString()
+    nickname: string;
+    @IsString()
+    bio: string;
+    @IsString()
+    avatar: string;
+    @IsString()
+    website: string;
+}
+

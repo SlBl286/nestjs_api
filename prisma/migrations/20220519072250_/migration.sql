@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Comment" ALTER COLUMN "likeCount" DROP NOT NULL,
+ALTER COLUMN "likeCount" SET DEFAULT 1;

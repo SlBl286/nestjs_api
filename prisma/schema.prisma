@@ -15,18 +15,18 @@ model User {
     createdAt   DateTime    @default(now())
     updatedAt   DateTime    @updatedAt
 
-    email       String      @unique
+    email       String      @unique @db.VarChar(50)
     hash        String
 
     info        UserInfo?    
 }
 model UserInfo {
     id          Int         @id @default(autoincrement())
-    name        String?
-    nickname    String
-    bio         String?
+    name        String?     @db.VarChar(50)
+    nickname    String      @db.VarChar(50)
+    bio         String?     @db.VarChar(255)
     avatar      String?
-    website     String?
+    website     String?     @db.VarChar(100)
 
     comments    Comment[]
     posts       Post[]
@@ -41,7 +41,7 @@ model Category {
     id          Int         @id @default(autoincrement())
     createdAt   DateTime    @default(now())
     updatedAt   DateTime    @updatedAt
-    name        String      @unique
+    name        String      @unique @db.VarChar(50)
 
 
     posts       CategoriesOnPosts[]
@@ -52,7 +52,7 @@ model Comment {
     createdAt   DateTime    @default(now())
     updatedAt   DateTime    @updatedAt
     content     String
-    likeCount   Int
+    likeCount   Int         @default(1)
     
     userId      Int
     user        UserInfo    @relation(fields: [userId],references: [id])
@@ -83,7 +83,7 @@ model Media {
     updatedAt   DateTime    @updatedAt
     order       Int
     content     String
-    type        String
+    type        String      @db.VarChar(50)
     
 
     postId      Int
