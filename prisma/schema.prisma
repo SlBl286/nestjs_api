@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,95 +8,81 @@ datasource db {
 }
 
 model User {
-    id          Int         @id @default(autoincrement())
-    createdAt   DateTime    @default(now())
-    updatedAt   DateTime    @updatedAt
-
-    email       String      @unique @db.VarChar(50)
-    hash        String
-
-    info        UserInfo?    
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  email     String    @unique @db.VarChar(50)
+  hash      String
+  info      UserInfo?
 }
+
 model UserInfo {
-    id          Int         @id @default(autoincrement())
-    name        String?     @db.VarChar(50)
-    nickname    String      @db.VarChar(50)
-    bio         String?     @db.VarChar(255)
-    avatar      String?
-    website     String?     @db.VarChar(100)
-
-    comments    Comment[]
-    posts       Post[]
-
-    userId      Int
-    user        User        @relation(fields: [userId], references: [id])
-
+  id       Int       @id @default(autoincrement())
+  name     String?   @db.VarChar(50)
+  nickname String    @db.VarChar(50)
+  bio      String?   @db.VarChar(255)
+  avatar   String?
+  website  String?   @db.VarChar(100)
+  userId   Int       @unique
+  user     User      @relation(fields: [userId], references: [id])
+  comments Comment[]
+  posts    Post[]
 }
-
 
 model Category {
-    id          Int         @id @default(autoincrement())
-    createdAt   DateTime    @default(now())
-    updatedAt   DateTime    @updatedAt
-    name        String      @unique @db.VarChar(50)
-
-
-    posts       CategoriesOnPosts[]
+  id        Int                 @id @default(autoincrement())
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @updatedAt
+  name      String              @unique @db.VarChar(50)
+  posts     CategoriesOnPosts[]
 }
 
 model Comment {
-    id          Int         @id @default(autoincrement())
-    createdAt   DateTime    @default(now())
-    updatedAt   DateTime    @updatedAt
-    content     String
-    likeCount   Int         @default(1)
-    
-    userId      Int
-    user        UserInfo    @relation(fields: [userId],references: [id])
-    postId      Int
-    post        Post        @relation(fields: [postId],references: [id])
-
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  content   String
+  likeCount Int      @default(1)
+  userId    Int
+  postId    Int
+  post      Post     @relation(fields: [postId], references: [id])
+  user      UserInfo @relation(fields: [userId], references: [id])
 }
 
 model Post {
-    id          Int         @id @default(autoincrement())
-    createdAt   DateTime    @default(now())
-    updatedAt   DateTime    @updatedAt
-    content     String      
-    mediaList   Media[]
-    likeCount   Int
-
-    comments    Comment[]
-    categories  CategoriesOnPosts[]
-
-    userId      Int
-    user        UserInfo    @relation(fields: [userId],references: [id])
-    
+  id         Int                 @id @default(autoincrement())
+  createdAt  DateTime            @default(now())
+  updatedAt  DateTime            @updatedAt
+  content    String
+  likeCount  Int
+  userId     Int
+  user       UserInfo            @relation(fields: [userId], references: [id])
+  categories CategoriesOnPosts[]
+  comments   Comment[]
+  mediaList  Media[]
 }
 
 model Media {
-    id          Int         @id @default(autoincrement())
-    createdAt   DateTime    @default(now())
-    updatedAt   DateTime    @updatedAt
-    order       Int
-    content     String
-    type        String      @db.VarChar(50)
-    
-
-    postId      Int
-    post        Post        @relation(fields: [postId],references: [id])
-
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  order     Int
+  type      String   @db.VarChar(50)
+  postId    Int
+  endCoding String   @db.VarChar(50)
+  fileName  String
+  size      Int
+  url       String   @db.VarChar(255)
+  post      Post     @relation(fields: [postId], references: [id])
 }
 
 model CategoriesOnPosts {
-    post        Post        @relation(fields: [postId], references: [id])
-    postId      Int
-    Category    Category    @relation(fields: [categoryId],references: [id])
-    categoryId  Int
-    createdAt   DateTime    @default(now())
-    updatedAt   DateTime    @updatedAt
-    
+  postId     Int
+  categoryId Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  Category   Category @relation(fields: [categoryId], references: [id])
+  post       Post     @relation(fields: [postId], references: [id])
 
-    @@id([postId,categoryId])
+  @@id([postId, categoryId])
 }
-

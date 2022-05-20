@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { LoggerMiddleware } from './middlewares/logger.middleware';
 import { PostModule } from './post/post.module';
 import { CategoryModule } from './category/category.module';
+import { CdnModule } from './cdn/cdn.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { CategoryModule } from './category/category.module';
     PrismaModule,
     PostModule,
     CategoryModule,
+    CdnModule,
   ],
 })
 export class AppModule implements NestModule {
