@@ -21,8 +21,13 @@ model UserInfo {
   name     String?   @db.VarChar(50)
   nickname String    @db.VarChar(50)
   bio      String?   @db.VarChar(255)
+  gender   Boolean
+  dob      DateTime?
+  phone    String    @db.VarChar(20)
   avatar   String?
   website  String?   @db.VarChar(100)
+  folower  Int[]
+  folowing Int[]
   userId   Int       @unique
   user     User      @relation(fields: [userId], references: [id])
   comments Comment[]

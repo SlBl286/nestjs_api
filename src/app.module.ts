@@ -2,15 +2,18 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { PrismaModule } from './prisma/prisma.module';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { LoggerMiddleware } from './middlewares/logger.middleware';
 import { PostModule } from './post/post.module';
 import { CategoryModule } from './category/category.module';
 import { CdnModule } from './cdn/cdn.module';
+import { MulterModule } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    
     AuthModule,
     UserModule,
     PrismaModule,

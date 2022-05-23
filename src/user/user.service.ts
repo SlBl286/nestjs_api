@@ -41,19 +41,27 @@ export class UserService {
             create: {
               name: userDto.name,
               nickname: userDto.nickName,
-              avatar: userDto.avatar,
               bio: userDto.bio,
               website: userDto.website,
             },
             update: {
               name: userDto.name,
               nickname: userDto.nickName,
-              avatar: userDto.avatar,
               bio: userDto.bio,
               website: userDto.website,
             },
           },
         },
+      },
+    });
+  }
+  async updateAvatar(media: Express.Multer.File, userId: number) {
+    return await this.prisma.userInfo.update({
+      where: {
+        userId: userId,
+      },
+      data: {
+        avatar: media.filename,
       },
     });
   }

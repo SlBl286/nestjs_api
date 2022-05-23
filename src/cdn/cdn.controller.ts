@@ -59,7 +59,7 @@ export class CdnController {
     });
     return {
       message: 'File deleted',
-      statusCode: 200,  
+      statusCode: 200,
     };
   }
 }

@@ -15,14 +15,25 @@ export class UserController {
   @UseGuards(JwtGuard)
   @Get('me')
   async getMe(@GetUser() user: User) {
-
     var a = await this.userService.getUserInfo(user.id);
-        console.log(a);
-        return a;
+    console.log(a);
+    return a;
   }
+  @UseGuards(JwtGuard)
+  @Put('avatar')
+  async updateAvatar(
+    @Body() media: Express.Multer.File,
+    @GetUser() user: User,
+  ) {
+    var a = await this.userService.updateAvatar(media, user.id);
+    console.log(a);
+    return a;
+  }
+
   @UseGuards(JwtGuard)
   @Put('me')
   async updateMe(@Body() userDto: UserInfoUpdateDto, @GetUser() user: User) {
+    console.log(userDto);
     var updatedUser = await this.userService.updateUser(userDto, user);
     delete updatedUser.id;
 

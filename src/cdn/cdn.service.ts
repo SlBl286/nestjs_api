@@ -6,6 +6,7 @@ export class CdnService {
   constructor(private prisma: PrismaService) {}
 
   async upload(media: Array<Express.Multer.File>, postId: number) {
+    console.log(media);
     if (media.length <= 0) throw new ForbiddenException('Media is required');
 
     for (let index = 0; index < media.length; index++) {
