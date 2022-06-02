@@ -15,6 +15,8 @@ import { CdnService } from './cdn.service';
             cb(null, configService.get('UPLOAD_DIR'));
           },
           filename: function (req, file, cb) {
+
+            console.log(file);
             const uniqueSuffix =
               Date.now() + '-' + Math.round(Math.random() * 1e9);
             cb(

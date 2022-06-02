@@ -1,6 +1,20 @@
-import { Body, Controller, Delete, Get, Put, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Post,
+  Put,
+  UploadedFiles,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
+import { unlink } from 'fs';
+import { join } from 'path';
+import { saveImageToStorage } from 'src/helpers/imagestorage';
 import { GetUser } from '../auth/decorator';
 import { JwtGuard } from '../auth/guard';
 import { UserInfoUpdateDto } from './dto';
@@ -20,14 +34,27 @@ export class UserController {
     return a;
   }
   @UseGuards(JwtGuard)
-  @Put('avatar')
+  @Post('avatar')
+  @UseInterceptors(FilesInterceptor('image', 1, saveImageToStorage))
   async updateAvatar(
-    @Body() media: Express.Multer.File,
+    @UploadedFiles() image: Array<Express.Multer.File>,
     @GetUser() user: User,
   ) {
-    var a = await this.userService.updateAvatar(media, user.id);
-    console.log(a);
-    return a;
+    var userInfo = await this.userService.updateAvatar(image.pop(), user.id);
+    if (userInfo != null) {
+      var url = './public/uploads/' + userInfo.avatar;
+      const file = join(process.cwd(), url);
+      new Promise<void>((resolve, reject) => {
+        unlink(file, (err) => {
+          if (err) reject(err);
+          else resolve();
+        });
+      });
+    }
+     return {
+      message: 'Updated avatar',
+      statusCode: 200,
+    };
   }
 
   @UseGuards(JwtGuard)

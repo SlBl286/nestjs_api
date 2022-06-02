@@ -21,9 +21,9 @@ model UserInfo {
   name     String?   @db.VarChar(50)
   nickname String    @db.VarChar(50)
   bio      String?   @db.VarChar(255)
-  gender   Boolean
+  gender   Int?
   dob      DateTime?
-  phone    String    @db.VarChar(20)
+  phone    String?    @db.VarChar(20)
   avatar   String?
   website  String?   @db.VarChar(100)
   folower  Int[]

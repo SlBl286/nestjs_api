@@ -56,14 +56,30 @@ export class UserService {
     });
   }
   async updateAvatar(media: Express.Multer.File, userId: number) {
-    return await this.prisma.userInfo.update({
+    var userInfo = await this.prisma.userInfo.findUnique({
       where: {
         userId: userId,
       },
-      data: {
-        avatar: media.filename,
+
+      select: {
+        avatar: true,
       },
     });
+
+    await this.prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        info: {
+          update: {
+            avatar: media.filename,
+          },
+        },
+      },
+    });
+
+    return userInfo;
   }
   async deleteUser(id: number) {
     return await this.prisma.user.delete({

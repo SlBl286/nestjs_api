@@ -11,12 +11,15 @@ import {
   StreamableFile,
   UploadedFile,
   UploadedFiles,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { createReadStream, unlink } from 'fs';
 import { join } from 'path';
+import { of } from 'rxjs';
+import { JwtGuard } from 'src/auth/guard';
 
 import { CdnService } from './cdn.service';
 
@@ -24,27 +27,43 @@ import { CdnService } from './cdn.service';
 @Controller('cdn')
 export class CdnController {
   constructor(private cdnService: CdnService) {}
-  @ApiConsumes('multipart/form-data')
+  @UseGuards(JwtGuard)
   @Post('upload')
   @UseInterceptors(FilesInterceptor('media'))
   async uploadFile(
     @UploadedFiles() media: Array<Express.Multer.File>,
     @Query('postId', ParseIntPipe) postId: number,
   ) {
+    // console.log(media);
     return this.cdnService.upload(media, postId);
   }
-  @Get('file')
+  @UseGuards(JwtGuard)
+  @Get('/media/:mediaId')
   async getFile(
-    @Query('mediaId', ParseIntPipe) mediaId: number,
+    @Param('mediaId', ParseIntPipe) mediaId: number,
     @Response({ passthrough: true }) res,
   ): Promise<StreamableFile> {
     var media = await this.cdnService.get(mediaId);
-    var url = media.fileName;
+    console.log(media);
     res.setHeader('Content-Type', media.type);
 
     const file = createReadStream(join(process.cwd(), media.url));
     return new StreamableFile(file);
   }
+  @UseGuards(JwtGuard)
+  @Get('/:fileName')
+  async getFileByName(
+    @Param('fileName') fileName: string,
+    @Response({ passthrough: true }) res,
+  ): Promise<StreamableFile> {
+    res.setHeader('Content-Type', fileName.split('.').at(1));
+
+    const file = createReadStream(
+      join(process.cwd(), './public/uploads/' + fileName),
+    );
+    return new StreamableFile(file);
+  }
+  @UseGuards(JwtGuard)
   @Delete(':id')
   async deleteFile(@Param('id', ParseIntPipe) mediaId: number) {
     var media = await this.cdnService.delete(mediaId);

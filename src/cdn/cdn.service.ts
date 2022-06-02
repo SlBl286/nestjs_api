@@ -6,7 +6,7 @@ export class CdnService {
   constructor(private prisma: PrismaService) {}
 
   async upload(media: Array<Express.Multer.File>, postId: number) {
-    console.log(media);
+    console.log('media', media);
     if (media.length <= 0) throw new ForbiddenException('Media is required');
 
     for (let index = 0; index < media.length; index++) {
@@ -25,7 +25,7 @@ export class CdnService {
           },
         },
       });
-      console.log(a);
+      // console.log(a);
     }
   }
   async get(mediaId: number) {
@@ -36,7 +36,6 @@ export class CdnService {
     });
     return media;
   }
-
   async delete(mediaId: number) {
     var media = await this.prisma.media
       .delete({
