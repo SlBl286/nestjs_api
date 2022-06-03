@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsOptional, IsString } from 'class-validator';
+import { IsEmail, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class UserInfoUpdateDto {
   @ApiProperty({
@@ -15,7 +15,7 @@ export class UserInfoUpdateDto {
   @IsString()
   @IsOptional()
   avatar: string;
-  @ApiProperty()  
+  @ApiProperty()
   @IsString()
   @IsOptional()
   bio: string;
@@ -23,21 +23,44 @@ export class UserInfoUpdateDto {
   @IsString()
   @IsOptional()
   website: string;
-
 }
 
-export class UserInfoDto{
-    @IsEmail()
-    email: string;
-    @IsString()
-    name: string;
-    @IsString()
-    nickname: string;
-    @IsString()
-    bio: string;
-    @IsString()
-    avatar: string;
-    @IsString()
-    website: string;
+export class UserInfoDto {
+  @ApiProperty()
+  @IsEmail()
+  email: string;
+  @ApiProperty()
+  @IsString()
+  name: string;
+  @ApiProperty()
+  @IsString()
+  nickname: string;
+  @ApiProperty()
+  @IsString()
+  bio: string;
+  @ApiProperty()
+  @IsString()
+  avatar: string;
+  @ApiProperty()
+  @IsString()
+  website: string;
+  @ApiProperty()
+  @IsOptional()
+  @IsNumber()
+  followers: number[];
+  @ApiProperty()
+  @IsOptional()
+  @IsNumber()
+  following: number[];
+  @ApiProperty()
+  @IsOptional()
+  @IsNumber()
+  gender: number;
+  @ApiProperty()
+  @IsOptional()
+  @IsNumber()
+  id: number;
+  @IsNumber()
+  @IsOptional()
+  posts: number[];
 }
-

@@ -27,6 +27,10 @@ export class UserService {
       },
     });
     userInfo.email = userQuery.email;
+    userInfo.following = userInfoQuery.folowing;
+    userInfo.followers = userInfoQuery.folower;
+    userInfo.gender = userInfoQuery.gender;
+    userInfo.posts = userInfoQuery.folowing ;
     return userInfo;
   }
 
