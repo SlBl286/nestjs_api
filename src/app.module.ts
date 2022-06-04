@@ -9,11 +9,12 @@ import { CategoryModule } from './category/category.module';
 import { CdnModule } from './cdn/cdn.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { AppGateway } from './event/event.gateway';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    
+
     AuthModule,
     UserModule,
     PrismaModule,
@@ -21,6 +22,7 @@ import { diskStorage } from 'multer';
     CategoryModule,
     CdnModule,
   ],
+  providers: [AppGateway],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
