@@ -1,5 +1,7 @@
 import { Logger } from '@nestjs/common';
 import {
+  ConnectedSocket,
+  MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
   OnGatewayInit,
@@ -14,12 +16,12 @@ import { Server, Socket } from 'socket.io';
 export class AppGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
-    @WebSocketServer() server;
+  @WebSocketServer() server;
   afterInit(server: Server) {
     this.logger.log('Initialized');
   }
   handleConnection(client: Socket, ...args: any[]) {
-    this.logger.log('Client connected');
+    this.logger.log('Client connected ' + client.id);
   }
   private logger: Logger = new Logger('AppGateway');
   handleDisconnect(client: Socket) {
@@ -27,7 +29,12 @@ export class AppGateway
   }
 
   @SubscribeMessage('message')
-  handleMessage(client: Socket, payload: string): WsResponse<string> {
-    return { event: 'message', data: ` ${payload}` };
+  handleMessage(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() payload: string,
+  ): WsResponse<string> {
+    this.logger.log(payload);
+    this.logger.log(client.data);
+    return { event: 'message', data: client.id };
   }
 }
